@@ -16,11 +16,10 @@ import org.xml.sax.helpers.DefaultHandler;
 public class GetUserIdParser extends DefaultHandler {
 
 	String xml; 
-	String tempVal; 
+	StringBuilder tempVal; 
 	String userId = null; 
 	
 	public GetUserIdParser(String xml) {
-		tempVal = new String();
 		this.xml = xml;
 	}
 	
@@ -51,16 +50,16 @@ public class GetUserIdParser extends DefaultHandler {
 	//Event Handlers
 	public void startElement(String uri, String localName, String qName,
 		Attributes attributes) throws SAXException {
-		tempVal = "";
+		tempVal = new StringBuilder();
 	}
 	
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		tempVal = new String(ch,start,length);
+		tempVal.append(ch,start,length);
 	}
 	
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if(qName.equalsIgnoreCase("userid")) {
-			userId = tempVal.trim();
+			userId = tempVal.toString().trim();
 		}
 	}
 
