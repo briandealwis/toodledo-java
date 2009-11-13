@@ -18,13 +18,15 @@ public class TdTime {
 	}
 	
 	public TdTime(String content) {
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm:ss");
-		DateTime dt = fmt.parseDateTime(content);
+		// In practice, Toodledo returns times as '11:00 am'
+		// though its examples don't include the space.
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mmaa");
+		DateTime dt = fmt.parseDateTime(content.replace(" ", ""));
 		time = dt.toLocalTime();
 	}
 
 	public String toString() {
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm:ss");
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm aa");
 		return time.toString(fmt);
 	}
 
