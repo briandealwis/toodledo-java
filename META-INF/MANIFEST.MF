@@ -16,7 +16,4 @@ Import-Package: org.apache.commons.codec;version="1.3.0",
 Export-Package: org.loststone.toodledo,
  org.loststone.toodledo.data,
  org.loststone.toodledo.exception,
- org.loststone.toodledo.request,
- org.loststone.toodledo.response,
- org.loststone.toodledo.util,
- org.loststone.toodledo.xml
+ org.loststone.toodledo.util
