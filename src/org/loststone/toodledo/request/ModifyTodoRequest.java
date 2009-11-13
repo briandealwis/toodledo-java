@@ -5,8 +5,11 @@ import org.loststone.toodledo.exception.ToodledoApiException;
 import org.loststone.toodledo.response.ModifyTodoResponse;
 import org.loststone.toodledo.response.Response;
 import org.loststone.toodledo.util.AuthToken;
+import org.loststone.toodledo.util.TextEncoder;
 
 public class ModifyTodoRequest extends Request {
+
+	private TextEncoder tEnc = new TextEncoder();
 
 	public ModifyTodoRequest(AuthToken token, Todo todo) throws ToodledoApiException {
 		super();
@@ -17,21 +20,24 @@ public class ModifyTodoRequest extends Request {
 		} else {
 			throw new ToodledoApiException("At least the todo must have the 'id' field.");
 		}
-		if (todo.hasTitle()) buff.append(";title=").append(todo.getTitle()); 
-		if (todo.hasTag()) buff.append(";tag=").append(todo.getTag());
+		if (todo.hasTitle()) buff.append(";title=").append(tEnc.encode(todo.getTitle())); 
+		if (todo.hasTag()) buff.append(";tag=").append(tEnc.encode(todo.getTag()));
 		if (todo.hasFolder()) buff.append(";folder=").append(todo.getFolder());
 		if (todo.hasContext()) buff.append(";context=").append(todo.getContext());
 		if (todo.hasGoal()) buff.append(";goal=").append(todo.getGoal());
 		if (todo.hasParent()) buff.append(";parent=").append(todo.getParent());
-		if (todo.hasBefore()) buff.append(";before=").append(todo.getBefore());
-		if (todo.hasStartbefore()) buff.append(";startbefore=").append(todo.getStartbefore());
+		if (todo.hasStartDate()) buff.append(";startdate=").append(todo.getStartDate());
+		if (todo.hasStartTime()) buff.append(";starttime=").append(todo.getStartTime());
+		if (todo.hasDueDate()) buff.append(";duedate=").append(todo.getDueDate());
+		if (todo.hasDueTime()) buff.append(";duetime=").append(todo.getDueTime());
+		if (todo.hasReminder()) buff.append(";reminder=").append(todo.getReminder());
 		if (todo.hasRepeat()) buff.append(";repeat=").append(todo.getRepeat());
-		if (todo.hasRepAdvanced()) buff.append(";rep_advanced=").append(todo.getRepAdvanced());
+		if (todo.hasRepAdvanced()) buff.append(";rep_advanced=").append(tEnc.encode(todo.getRepAdvanced()));
 		if (todo.hasStatus()) buff.append(";status=").append(todo.getStatus());
 		if (todo.hasLength()) buff.append(";length=").append(todo.getLength());
 		if (todo.hasPriority()) buff.append(";priority=").append(todo.getPriority());
-		if (todo.hasStar()) buff.append(";star=").append(todo.getStart());
-		if (todo.hasNote()) buff.append(";note=").append(todo.hasNote());
+		if (todo.hasStar()) buff.append(";star=").append(todo.isStar());
+		if (todo.hasNote()) buff.append(";note=").append(tEnc.encode(todo.getNote()));
 		this.url = this.url.concat(buff.toString());
 	}
 

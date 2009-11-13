@@ -14,6 +14,11 @@ public class TdDateTime extends TdDate {
 		this.dt = new DateTime(year, month, day, hour, minute, second, 0);
 	}
 	
+	public TdDateTime(String content) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
+		dt = fmt.parseDateTime(content);
+	}
+
 	public String toString() {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 		return dt.toString(fmt);

@@ -6,6 +6,7 @@ import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
 import org.loststone.toodledo.data.Todo;
+import org.loststone.toodledo.data.TodoFilter;
 import org.loststone.toodledo.exception.IncorrectUserPasswordException;
 import org.loststone.toodledo.exception.MissingPasswordException;
 import org.loststone.toodledo.exception.ToodledoApiException;
@@ -105,7 +106,7 @@ public interface ToodledoApi {
 	 * @return A list containing the tasks that match the filter.
 	 * @throws ToodledoApiException
 	 */
-	List<Todo> getTodosList(AuthToken auth, Todo filter) throws ToodledoApiException;
+	List<Todo> getTodosList(AuthToken auth, TodoFilter filter) throws ToodledoApiException;
 	
 	/**
 	 * Gets all the folders

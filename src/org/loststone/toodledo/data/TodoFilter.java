@@ -2,61 +2,70 @@ package org.loststone.toodledo.data;
 
 import org.loststone.toodledo.util.TdDate;
 import org.loststone.toodledo.util.TdDateTime;
-import org.loststone.toodledo.util.TdTime;
 
 /**
- * This class maps all the components of a toodledo task. For more info
- * go to http://www.toodledo.com/info/api_doc.php
+ * This class maps all the components of a toodledo task filter. 
+ * For more info go to http://www.toodledo.com/info/api_doc.php
  * @author lant
  *
  */
-public class Todo {
-	int id; 
-	boolean star; 
+public class TodoFilter {
 	String title;
 	String tag; 
-	int folder;
-	int context;
-	int goal;
+	int folder; // id of the folder, 0 means no folder.
+	int context; // 0 no context
+	int goal; // 0 no goal
 	Priority priority;
-	int reminder;
 	Repeat repeat;
 	String rep_advanced; 
 	Status status;
-	int parent;
-	TdDate added; 
-	TdDate startdate; 
-	TdTime starttime;
-	TdDate duedate;
-	TdTime duetime; 
-	TdDateTime modified;
-	TdDate completed;
+	int parent; // 0 if none
+	int shorter; 
 	int length; 
+	int longer;
+	TdDate before;
+	TdDate after; 
+	TdDate startbefore; 
+	TdDate startafter;
+	TdDateTime modbefore;
+	TdDateTime modafter; 
+	TdDate compbefore;
+	TdDate compafter; 
+	boolean notcomp;
+	boolean star; 
+	int id; 
+	int start; 
+	int end;
 	String note; 
+	private boolean hasEnd = false;
+	private boolean hasStart = false;
 	private boolean hasId = false;
 	private boolean hasStar = false;
-	private boolean hasTitle = false;
-	private boolean hasAdded = false;
-	private boolean hasCompleted = false;
-	private boolean hasModified = false;
-	private boolean hasDueDate = false;
-	private boolean hasDueTime = false;
-	private boolean hasStartDate = false;
-	private boolean hasStartTime = false;
+	private boolean hasComp = false;
+	private boolean hasCompafter = false;
+	private boolean hasCompbefore = false;
+	private boolean hasModbefore = false;
+	private boolean hasModafter = false;
+	private boolean hasStartafter = false;
+	private boolean hasStartbefore = false;
+	private boolean hasAfter = false;
+	private boolean hasBefore = false;
+	private boolean hasLonger = false;
+	private boolean hasShorter = false;
 	private boolean hasParent = false;
 	private boolean hasStatus = false;
-	private boolean hasReminder = false;
 	private boolean hasRepeat = false;
-	private boolean hasRepAdvanced = false;
 	private boolean hasPriority = false;
 	private boolean hasGoal = false;
 	private boolean hasContext = false;
 	private boolean hasFolder = false;
 	private boolean hasTag = false;
+	private boolean hasTitle = false;
+	private boolean hasRepAdvanced = false;
 	private boolean hasLength = false; 
 	private boolean hasNote = false; 
 	
-	public Todo() {}
+	public TodoFilter() {}
 
 	
 	/**
@@ -231,112 +240,173 @@ public class Todo {
 		this.parent = parent;
 		this.hasParent = true;
 	}
-		
+	
 	/**
-	 * @return the due date
+	 * @return the shorter
 	 */
-	public TdDate getDueDate() {
-		return duedate;
+	public int getShorter() {
+		return shorter;
 	}
 	
 	/**
-	 * @return the due time
+	 * @param shorter the shorter to set
 	 */
-	public TdTime getDueTime() {
-		return duetime;
+	public void setShorter(int shorter) {
+		this.shorter = shorter;
+		this.hasShorter = true; 
+	}
+
+	/**
+	 * @return the longer
+	 */
+	public int getLonger() {
+		return longer;
 	}
 	
 	/**
-	 * @param date the due date to set
+	 * @param longer the longer to set
 	 */
-	public void setDueDate(TdDate date) {
-		this.duedate = date;
-		this.hasDueDate = true;
+	public void setLonger(int longer) {
+		this.longer = longer;
+		this.hasLonger = true;
 	}
 	
 	/**
-	 * @param time the due time to set
+	 * @return the before
 	 */
-	public void setDueTime(TdTime time) {
-		this.duetime = time;
-		this.hasDueTime = true;
+	public TdDate getBefore() {
+		return before;
 	}
 	
 	/**
-	 * @return the start date
+	 * @param before the before to set
 	 */
-	public TdDate getStartDate() {
-		return startdate;
+	public void setBefore(TdDate before) {
+		this.before = before;
+		this.hasBefore = true;
 	}
 	
 	/**
-	 * @return the start time
+	 * @return the after
 	 */
-	public TdTime getStartTime() {
-		return starttime;
+	public TdDate getAfter() {
+		return after;
 	}
 	
 	/**
-	 * @param date the start date to set
+	 * @param after the after to set
 	 */
-	public void setStartDate(TdDate date) {
-		this.startdate = date;
-		this.hasStartDate = true;
+	public void setAfter(TdDate after) {
+		this.after = after;
+		this.hasAfter = true;
 	}
 	
 	/**
-	 * @param time the start time to set
+	 * @return the startbefore
 	 */
-	public void setStartTime(TdTime time) {
-		this.starttime = time;
-		this.hasStartTime = true;
+	public TdDate getStartbefore() {
+		return startbefore;
 	}
 	
 	/**
-	 * @return the modified date/time
+	 * @param startbefore the startbefore to set
 	 */
-	public TdDateTime getModified() {
-		return modified;
+	public void setStartbefore(TdDate startbefore) {
+		this.startbefore = startbefore;
+		this.hasStartbefore = true;
 	}
 	
 	/**
-	 * @param dt the modified to set
+	 * @return the startafter
 	 */
-	public void setModified(TdDateTime dt) {
-		this.modified = dt;
-		this.hasModified = true;
+	public TdDate getStartafter() {
+		return startafter;
+	}
+	
+	
+	/**
+	 * @param startafter the startafter to set
+	 */
+	public void setStartafter(TdDate startafter) {
+		this.startafter = startafter;
+		this.hasStartafter = true;
 	}
 	
 	/**
-	 * @return the added
+	 * @return the modbefore
 	 */
-	public TdDate getAdded() {
-		return added;
+	public TdDateTime getModbefore() {
+		return modbefore;
 	}
 	
 	/**
-	 * @param date the added to set
+	 * @param modbefore the modbefore to set
 	 */
-	public void setAdded(TdDate date) {
-		this.added = date;
-		this.hasAdded = true;
+	public void setModbefore(TdDateTime modbefore) {
+		this.modbefore = modbefore;
+		this.hasModbefore = true;
 	}
 	
 	/**
-	 * @return the completed
+	 * @return the modafter
 	 */
-	public TdDate getCompleted() {
-		return completed;
+	public TdDateTime getModafter() {
+		return modafter;
 	}
 	
 	/**
-	 * @param date the completed to set
+	 * @param modafter the modafter to set
 	 */
-	public void setCompleted(TdDate date) {
-		this.completed = date;
-		this.hasCompleted = true;
+	public void setModafter(TdDateTime modafter) {
+		this.modafter = modafter;
+		this.hasModafter = true;
 	}
 	
+	/**
+	 * @return the compbefore
+	 */
+	public TdDate getCompbefore() {
+		return compbefore;
+	}
+	
+	/**
+	 * @param compbefore the compbefore to set
+	 */
+	public void setCompbefore(TdDate compbefore) {
+		this.compbefore = compbefore;
+		this.hasCompbefore = true;
+	}
+	
+	/**
+	 * @return the compafter
+	 */
+	public TdDate getCompafter() {
+		return compafter;
+	}
+	
+	/**
+	 * @param compafter the compafter to set
+	 */
+	public void setCompafter(TdDate compafter) {
+		this.compafter = compafter;
+		this.hasCompafter = true;
+	}
+	
+	/**
+	 * @return the notcomp
+	 */
+	public boolean isNotcomp() {
+		return notcomp;
+	}
+	
+	/**
+	 * @param notcomp the notcomp to set
+	 */
+	public void setNotcomp(boolean notcomp) {
+		this.notcomp = notcomp;
+		this.hasComp = true;
+	}
+
 	/**
 	 * @return the star
 	 */
@@ -351,18 +421,7 @@ public class Todo {
 		this.star = star;
 		this.hasStar = true;
 	}
-
-	public void setReminder(int mins) {
-		this.reminder = mins;
-		this.hasReminder = true;
-	}
-
-
-	public int getReminder() {
-		return this.reminder;
-	}
-
-
+	
 	/**
 	 * @return the id
 	 */
@@ -379,6 +438,50 @@ public class Todo {
 	}
 	
 	/**
+	 * @return the start
+	 */
+	public int getStart() {
+		return start;
+	}
+	
+	/**
+	 * @param start the start to set
+	 */
+	public void setStart(int start) {
+		this.start = start;
+		this.hasStart = true;
+	}
+	
+	/**
+	 * @return the end
+	 */
+	public int getEnd() {
+		return end;
+	}
+	
+	/**
+	 * @param end the end to set
+	 */
+	public void setEnd(int end) {
+		this.end = end;
+		this.hasEnd = true;
+	}
+
+	/**
+	 * @return the hasEnd
+	 */
+	public boolean hasEnd() {
+		return hasEnd;
+	}
+
+	/**
+	 * @return the hasStart
+	 */
+	public boolean hasStart() {
+		return hasStart;
+	}
+
+	/**
 	 * @return the hasId
 	 */
 	public boolean hasId() {
@@ -393,52 +496,80 @@ public class Todo {
 	}
 
 	/**
-	 * @return the hasStartDate
+	 * @return the hasComp
 	 */
-	public boolean hasStartDate() {
-		return hasStartDate;
+	public boolean hasComp() {
+		return hasComp;
 	}
 
 	/**
-	 * @return the hasStartTime
+	 * @return the hasCompafter
 	 */
-	public boolean hasStartTime() {
-		return hasStartTime;
+	public boolean isHasCompafter() {
+		return hasCompafter;
 	}
 
 	/**
-	 * @return the hasDueDate
+	 * @return the hasCompbefore
 	 */
-	public boolean hasDueDate() {
-		return hasDueDate;
+	public boolean hasCompbefore() {
+		return hasCompbefore;
 	}
 
 	/**
-	 * @return the hasDueTime
+	 * @return the hasModbefore
 	 */
-	public boolean hasDueTime() {
-		return hasDueTime;
+	public boolean hasModbefore() {
+		return hasModbefore;
 	}
 
 	/**
-	 * @return the hasAdded
+	 * @return the hasModafter
 	 */
-	public boolean hasAdded() {
-		return hasAdded;
+	public boolean hasModafter() {
+		return hasModafter;
 	}
 
 	/**
-	 * @return the hasCompleted
+	 * @return the hasStartafter
 	 */
-	public boolean hasCompleted() {
-		return hasCompleted;
+	public boolean hasStartafter() {
+		return hasStartafter;
 	}
 
 	/**
-	 * @return the hasModified
+	 * @return the hasStartbefore
 	 */
-	public boolean hasModified() {
-		return hasModified;
+	public boolean hasStartbefore() {
+		return hasStartbefore;
+	}
+
+	/**
+	 * @return the hasAfter
+	 */
+	public boolean hasAfter() {
+		return hasAfter;
+	}
+
+	/**
+	 * @return the hasBefore
+	 */
+	public boolean hasBefore() {
+		return hasBefore;
+	}
+
+	/**
+	 * @return the hasLonger
+	 */
+	public boolean hasLonger() {
+		return hasLonger;
+	}
+
+	/**
+	 * @return the hasShorter
+	 */
+	public boolean hasShorter() {
+		return hasShorter;
 	}
 
 	/**
@@ -515,9 +646,4 @@ public class Todo {
 	public boolean hasNote() {
 		return this.hasNote;
 	}
-
-	public boolean hasReminder() {
-		return this.hasReminder;
-	}
-
 }

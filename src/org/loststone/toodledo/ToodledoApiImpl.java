@@ -6,6 +6,7 @@ import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
 import org.loststone.toodledo.data.Todo;
+import org.loststone.toodledo.data.TodoFilter;
 import org.loststone.toodledo.exception.IncorrectUserPasswordException;
 import org.loststone.toodledo.exception.MissingPasswordException;
 import org.loststone.toodledo.exception.ToodledoApiException;
@@ -53,7 +54,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	}
 
 	public Todo getTodo(AuthToken auth, int id) throws ToodledoApiException {
-		Todo filter = new Todo();
+		TodoFilter filter = new TodoFilter();
 		filter.setId(id);
 		List<Todo> res = getTodosList(auth,filter);
 		if (res != null && res.size() > 0) {
@@ -67,7 +68,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		return getTodosList(auth,null);
 	}
 	
-	public List<Todo> getTodosList(AuthToken auth, Todo filter) throws ToodledoApiException {
+	public List<Todo> getTodosList(AuthToken auth, TodoFilter filter) throws ToodledoApiException {
 		Request getTodosRequest = new GetTodosRequest(auth, filter);
 		GetTodosResponse response = (GetTodosResponse)getTodosRequest.getResponse();
 		if (response.succeeded())

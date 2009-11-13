@@ -1,5 +1,9 @@
 package org.loststone.toodledo.data;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Status {
 
     NONE(0),
@@ -20,4 +24,17 @@ public enum Status {
     }
     
     public int getStatusAsInteger() {return this.number;}
+    
+    private static final Map<Integer,Status> lookup =
+    	new HashMap<Integer, Status>(11);
+    
+    static {
+    	for(Status s : EnumSet.allOf(Status.class)) {
+    		lookup.put(s.getStatusAsInteger(), s);
+    	}
+    }
+    
+    public static Status get(int number) {
+    	return lookup.get(number);
+    }
 }

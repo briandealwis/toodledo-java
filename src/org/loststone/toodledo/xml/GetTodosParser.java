@@ -8,7 +8,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.loststone.toodledo.data.Priority;
+import org.loststone.toodledo.data.Repeat;
+import org.loststone.toodledo.data.Status;
 import org.loststone.toodledo.data.Todo;
+import org.loststone.toodledo.util.TdDate;
+import org.loststone.toodledo.util.TdDateTime;
+import org.loststone.toodledo.util.TdTime;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -75,6 +81,8 @@ public class GetTodosParser extends DefaultHandler {
 			
 		}else if(qName.equalsIgnoreCase("startdate")) {
 			
+		}else if(qName.equalsIgnoreCase("starttime")) {
+			
 		}else if(qName.equalsIgnoreCase("duedate")) {
 			
 		}else if(qName.equalsIgnoreCase("duetime")) {
@@ -94,7 +102,7 @@ public class GetTodosParser extends DefaultHandler {
 		}else if(qName.equalsIgnoreCase("length")) {
 			
 		}else if(qName.equalsIgnoreCase("timer")) {
-			
+			// TODO
 		}else if(qName.equalsIgnoreCase("note")) {
 						
 		}
@@ -105,50 +113,53 @@ public class GetTodosParser extends DefaultHandler {
 	}
 	
 	public void endElement(String uri, String localName, String qName) throws SAXException {
+		String content = tempVal.toString().trim();
 		if(qName.equalsIgnoreCase("task")) {
 			todoList.add(tmp_);
 		}else if(qName.equalsIgnoreCase("id")) {
-			tmp_.setId(Integer.parseInt(tempVal.toString()));
-		}else if(qName.equalsIgnoreCase("parent")) {
-			tmp_.setParent(Integer.parseInt(tempVal.toString()));
+			tmp_.setId(Integer.parseInt(content));
+		}else if(qName.equalsIgnoreCase("parent") && !content.isEmpty()) {
+			tmp_.setParent(Integer.parseInt(content));
 		}else if(qName.equalsIgnoreCase("children")) {
-			//TODO
-		}else if(qName.equalsIgnoreCase("title")) {
-			tmp_.setTitle(tempVal.toString());
-		}else if(qName.equalsIgnoreCase("tag")) {
-			tmp_.setTag(tempVal.toString());
-		}else if(qName.equalsIgnoreCase("folder")) {
-			tmp_.setFolder(Integer.parseInt(tempVal.toString()));
+			//ignored
+		}else if(qName.equalsIgnoreCase("title") && !content.isEmpty()) {
+			tmp_.setTitle(content);
+		}else if(qName.equalsIgnoreCase("tag") && !content.isEmpty()) {
+			tmp_.setTag(content);
+		}else if(qName.equalsIgnoreCase("folder") && !content.isEmpty()) {
+			tmp_.setFolder(Integer.parseInt(content));
 		}else if(qName.equalsIgnoreCase("context")) {
 		}else if(qName.equalsIgnoreCase("goal")) {
-		}else if(qName.equalsIgnoreCase("added")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("modified")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("startdate")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("duedate")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("duetime")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("completed")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("repeat")) {
-			// TODO
-		}else if(qName.equalsIgnoreCase("rep_advanced")) {
-			
-		}else if(qName.equalsIgnoreCase("status")) {
-			
+		}else if(qName.equalsIgnoreCase("added") && !content.isEmpty()) {
+			tmp_.setAdded(new TdDate(content));
+		}else if(qName.equalsIgnoreCase("modified") && !content.isEmpty()) {
+			tmp_.setModified(new TdDateTime(content));
+		}else if(qName.equalsIgnoreCase("startdate") && !content.isEmpty()) {
+			tmp_.setStartDate(new TdDate(content));
+		}else if(qName.equalsIgnoreCase("starttime") && !content.isEmpty()) {
+			tmp_.setStartTime(new TdTime(content));
+		}else if(qName.equalsIgnoreCase("duedate") && !content.isEmpty()) {
+			tmp_.setDueDate(new TdDate(content));
+		}else if(qName.equalsIgnoreCase("duetime") && !content.isEmpty()) {
+			tmp_.setDueTime(new TdTime(content));
+		}else if(qName.equalsIgnoreCase("completed") && !content.isEmpty()) {
+			tmp_.setCompleted(new TdDate(content));
+		}else if(qName.equalsIgnoreCase("repeat") && !content.isEmpty()) {
+			tmp_.setRepeat(Repeat.get(Integer.parseInt(content)));
+		}else if(qName.equalsIgnoreCase("rep_advanced") && !content.isEmpty()) {
+			tmp_.setRepAdvanced(content);
+		}else if(qName.equalsIgnoreCase("status") && !content.isEmpty()) {
+			tmp_.setStatus(Status.get(Integer.parseInt(content)));
 		}else if(qName.equalsIgnoreCase("star")) {
+			tmp_.setStar(Integer.parseInt(content) == 1);
+		}else if(qName.equalsIgnoreCase("priority") && !content.isEmpty()) {
+			tmp_.setPriority(Priority.get(Integer.parseInt(content)));
+		}else if(qName.equalsIgnoreCase("length") && !content.isEmpty()) {
+			tmp_.setLength(Integer.parseInt(content));			
+		}else if(qName.equalsIgnoreCase("timer") && !content.isEmpty()) {
 			
-		}else if(qName.equalsIgnoreCase("priority")) {
-			
-		}else if(qName.equalsIgnoreCase("length")) {
-			
-		}else if(qName.equalsIgnoreCase("timer")) {
-			
-		}else if(qName.equalsIgnoreCase("note")) {
-						
+		}else if(qName.equalsIgnoreCase("note") && !content.isEmpty()) {
+			tmp_.setNote(content);
 		}
 	}
 

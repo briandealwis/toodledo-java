@@ -16,8 +16,14 @@ public class TdDate {
 		dt = new DateTime(year, month, day, 0,0,0,0);
 	}
 	
+	public TdDate(String content) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd");
+		dt = fmt.parseDateTime(content);
+	}
+
 	public String toString() {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd");
 		return dt.toString(fmt);
 	}
+
 }

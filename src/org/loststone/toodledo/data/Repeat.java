@@ -1,5 +1,9 @@
 package org.loststone.toodledo.data;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Repeat {
 	NO_REPEAT(0),
 	WEEKLY(1),
@@ -17,5 +21,17 @@ public enum Repeat {
 		this.number = number;
 	}
 	public int getRepeatAsInteger() {return this.number;}
+    
+    private static final Map<Integer,Repeat> lookup =
+    	new HashMap<Integer, Repeat>(10);
+    
+    static {
+    	for(Repeat r : EnumSet.allOf(Repeat.class)) {
+    		lookup.put(r.getRepeatAsInteger(), r);
+    	}
+    }
 
+    public static Repeat get(int number) {
+    	return lookup.get(number);
+    }
 }
