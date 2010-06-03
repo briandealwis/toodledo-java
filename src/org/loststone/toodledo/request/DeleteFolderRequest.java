@@ -5,11 +5,11 @@ import org.loststone.toodledo.response.GenericDeleteResponse;
 import org.loststone.toodledo.response.Response;
 import org.loststone.toodledo.util.AuthToken;
 
-public class DeleteTodoRequest extends Request {
+public class DeleteFolderRequest extends Request {
 
-	public DeleteTodoRequest(AuthToken token, int id) throws ToodledoApiException {
+	public DeleteFolderRequest(AuthToken token, int id) throws ToodledoApiException {
 		super();
-		this.url = "http://api.toodledo.com/api.php?method=deleteTask;key="+token.getKey()+";id="+id;
+		this.url = "http://api.toodledo.com/api.php?method=deleteFolder;key="+token.getKey()+";id="+id;
 	}
 
 	@Override
@@ -19,4 +19,5 @@ public class DeleteTodoRequest extends Request {
 		return response;
 	}
 	
+
 }

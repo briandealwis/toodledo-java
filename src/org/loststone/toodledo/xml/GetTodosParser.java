@@ -121,7 +121,7 @@ public class GetTodosParser extends DefaultHandler {
 		}else if(qName.equalsIgnoreCase("parent") && !content.isEmpty()) {
 			tmp_.setParent(Integer.parseInt(content));
 		}else if(qName.equalsIgnoreCase("children")) {
-			//ignored
+			//TODO
 		}else if(qName.equalsIgnoreCase("title") && !content.isEmpty()) {
 			tmp_.setTitle(content);
 		}else if(qName.equalsIgnoreCase("tag") && !content.isEmpty()) {

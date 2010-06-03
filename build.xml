@@ -1,4 +1,4 @@
-<project name="toodledo-java" basedir="." default="main">
+<project name="toodledo-java" basedir="." default="main" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 <property name="src.dir"     value="src"/>
 <property name="build.dir"   value="build"/>
@@ -7,6 +7,8 @@
 <property name="main-class"  value="org.loststone.toodledo.client.Client"/>
 <property name="lib.dir"     value="lib"/>
 <property name="javadoc.dir"	value="doc/javadoc"/>
+<property name="junit.report.dir" location="${build.dir}/junit"/>
+<property name="test.dir" location="test"/>
 
 <path id="classpath">
 	<fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -16,14 +18,19 @@
 	<delete dir="build"/>
 </target>
 
-<target name="compile">
+<target name="resolve" description="--> retreive dependencies with ivy">
+	<ivy:retrieve/>
+</target>    
+
+<target name="compile" depends="resolve">
 	<mkdir dir="${classes.dir}"/>
 	<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+	<javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath"/>
 </target>
 
 <target name="jar" depends="compile">
   <mkdir dir="${jar.dir}"/>
-  <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+  <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" excludes="**/*Test*">
 	 <manifest>
 		<attribute name="Main-Class" value="${main-class}"/>
 	 </manifest>
@@ -32,15 +39,6 @@
 
 <target name="clean-build" depends="clean,jar"/>
 <target name="main" depends="clean,jar"/>
-
-<target name="run" depends="jar">
-  <java fork="false" classname="${main-class}">
-  <classpath>
-		<path refid="classpath"/>
-		<path location="${jar.dir}/${ant.project.name}.jar"/>
-  </classpath>
-  </java>
-</target>
 
 <target name="javadoc">
 <mkdir dir="${javadoc.dir}"/>
@@ -55,5 +53,30 @@ use="true"
 windowtitle="Toodledo Java API">
 </javadoc>
 </target>
+
+  <target name="test" depends="compile" description="Run the unit tests">
+    <delete dir="${junit.report.dir}"/>
+    <mkdir dir="${junit.report.dir}"/>
+
+    
+    <junit printsummary="yes" failureproperty="testfailed" showoutput="true">
+	<classpath>
+	    <pathelement location="${classes.dir}"/>
+	    <path refid="classpath"/>
+	</classpath>
+
+      <formatter type="plain" usefile="true"/>
+      
+      <batchtest todir="${junit.report.dir}" fork="yes">
+	<fileset dir="${test.dir}">
+		<include name="**/*Test*.java"/>
+		<exclude name="nothing"/>
+	</fileset>
+      </batchtest>
+      
+    </junit>
+    
+    <fail if="testfailed" message="Some test(s) failed. See '${junit.report.dir}' for details."/>
+  </target>
 
 </project>

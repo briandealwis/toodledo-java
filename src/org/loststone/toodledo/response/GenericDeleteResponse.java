@@ -3,9 +3,9 @@ package org.loststone.toodledo.response;
 import org.loststone.toodledo.exception.ToodledoApiException;
 
 
-public class DeleteTodoResponse extends Response {
+public class GenericDeleteResponse extends Response {
 
-	public DeleteTodoResponse(String resp) {
+	public GenericDeleteResponse(String resp) {
 		super(resp);
 	}
 

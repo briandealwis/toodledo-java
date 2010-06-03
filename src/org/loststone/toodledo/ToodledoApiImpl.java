@@ -15,6 +15,7 @@ import org.loststone.toodledo.request.AddFolderRequest;
 import org.loststone.toodledo.request.AddGoalRequest;
 import org.loststone.toodledo.request.AddTodoRequest;
 import org.loststone.toodledo.request.AuthorizeRequest;
+import org.loststone.toodledo.request.DeleteFolderRequest;
 import org.loststone.toodledo.request.DeleteTodoRequest;
 import org.loststone.toodledo.request.GetContextsRequest;
 import org.loststone.toodledo.request.GetFoldersRequest;
@@ -28,7 +29,7 @@ import org.loststone.toodledo.response.AddFolderResponse;
 import org.loststone.toodledo.response.AddGoalResponse;
 import org.loststone.toodledo.response.AddTodoResponse;
 import org.loststone.toodledo.response.AuthorizeResponse;
-import org.loststone.toodledo.response.DeleteTodoResponse;
+import org.loststone.toodledo.response.GenericDeleteResponse;
 import org.loststone.toodledo.response.GetContextsResponse;
 import org.loststone.toodledo.response.GetFoldersResponse;
 import org.loststone.toodledo.response.GetGoalsResponse;
@@ -98,7 +99,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 
 	public boolean deleteTodo(AuthToken auth, int id)  throws ToodledoApiException{
 		DeleteTodoRequest request = new DeleteTodoRequest(auth, id);
-		DeleteTodoResponse resp = (DeleteTodoResponse)request.getResponse();
+		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
 		if (resp.succeeded()) {
 			Integer _t = Integer.parseInt(resp.getResponseContent());
 			if (_t == 1) return true;
@@ -172,6 +173,19 @@ public class ToodledoApiImpl implements ToodledoApi {
 			return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
 		else
 			return null;
+	}
+
+	public boolean deleteFolder(AuthToken auth, int folderId)
+			throws ToodledoApiException {
+		DeleteFolderRequest request = new DeleteFolderRequest(auth, folderId);
+		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
+		if (resp.succeeded()) {
+			Integer _t = Integer.parseInt(resp.getResponseContent());
+			if (_t == 1) return true;
+			else return false;
+		} else
+			return false;
+		
 	}
 
 }
