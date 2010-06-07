@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class TdDate {
+public class TdDate implements Comparable<TdDate> {
 	
 	protected DateTime dt; 
 	
@@ -24,6 +24,10 @@ public class TdDate {
 	public String toString() {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd");
 		return dt.toString(fmt);
+	}
+
+	public int compareTo(TdDate o) {
+		return dt.compareTo(o.dt);
 	}
 
 }

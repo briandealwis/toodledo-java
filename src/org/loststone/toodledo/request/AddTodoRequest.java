@@ -25,9 +25,9 @@ public class AddTodoRequest extends Request {
 		if (todo.hasGoal()) buff.append(";goal=").append(todo.getGoal());
 		if (todo.hasParent()) buff.append(";parent=").append(todo.getParent());
 		if (todo.hasStartDate()) buff.append(";startdate=").append(todo.getStartDate());
-		if (todo.hasStartTime()) buff.append(";starttime=").append(todo.getStartTime());
+		if (todo.hasStartTime()) buff.append(";starttime=").append(tEnc.encode(todo.getStartTime().toString()));
 		if (todo.hasDueDate()) buff.append(";duedate=").append(todo.getDueDate());
-		if (todo.hasDueTime()) buff.append(";duetime=").append(todo.getDueTime());
+		if (todo.hasDueTime()) buff.append(";duetime=").append(tEnc.encode(todo.getDueTime().toString()));
 		if (todo.hasReminder()) buff.append(";reminder=").append(todo.getReminder());
 		if (todo.hasRepeat()) buff.append(";repeat=").append(todo.getRepeat());
 		if (todo.hasRepAdvanced()) buff.append(";rep_advanced=").append(tEnc.encode(todo.getRepAdvanced()));

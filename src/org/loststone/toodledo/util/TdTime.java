@@ -5,7 +5,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class TdTime {
+public class TdTime implements Comparable<TdTime> {
 	
 	protected LocalTime time; 
 	
@@ -28,6 +28,10 @@ public class TdTime {
 	public String toString() {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("hh:mm aa");
 		return time.toString(fmt);
+	}
+
+	public int compareTo(TdTime o) {
+		return time.compareTo(o.time);
 	}
 
 }

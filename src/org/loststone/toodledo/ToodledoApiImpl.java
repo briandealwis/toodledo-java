@@ -1,7 +1,9 @@
 package org.loststone.toodledo;
 
 import java.util.List;
+import java.util.Map;
 
+import org.loststone.toodledo.data.AccountInfo;
 import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
@@ -17,7 +19,10 @@ import org.loststone.toodledo.request.AddTodoRequest;
 import org.loststone.toodledo.request.AuthorizeRequest;
 import org.loststone.toodledo.request.DeleteFolderRequest;
 import org.loststone.toodledo.request.DeleteTodoRequest;
+import org.loststone.toodledo.request.EditFolderRequest;
+import org.loststone.toodledo.request.GetAccountInfoRequest;
 import org.loststone.toodledo.request.GetContextsRequest;
+import org.loststone.toodledo.request.GetDeletedRequest;
 import org.loststone.toodledo.request.GetFoldersRequest;
 import org.loststone.toodledo.request.GetGoalsRequest;
 import org.loststone.toodledo.request.GetTodosRequest;
@@ -30,24 +35,40 @@ import org.loststone.toodledo.response.AddGoalResponse;
 import org.loststone.toodledo.response.AddTodoResponse;
 import org.loststone.toodledo.response.AuthorizeResponse;
 import org.loststone.toodledo.response.GenericDeleteResponse;
+import org.loststone.toodledo.response.GetAccountInfoResponse;
 import org.loststone.toodledo.response.GetContextsResponse;
+import org.loststone.toodledo.response.GetDeletedResponse;
 import org.loststone.toodledo.response.GetFoldersResponse;
 import org.loststone.toodledo.response.GetGoalsResponse;
 import org.loststone.toodledo.response.GetTodosResponse;
 import org.loststone.toodledo.response.GetUserIdResponse;
 import org.loststone.toodledo.response.ModifyTodoResponse;
+import org.loststone.toodledo.response.Response;
 import org.loststone.toodledo.util.AuthToken;
+import org.loststone.toodledo.util.TdDateTime;
 import org.loststone.toodledo.xml.ContextsParser;
 import org.loststone.toodledo.xml.FolderParser;
+import org.loststone.toodledo.xml.GetAccountInfoParser;
+import org.loststone.toodledo.xml.GetDeletedParser;
 import org.loststone.toodledo.xml.GetTodosParser;
 import org.loststone.toodledo.xml.GetUserIdParser;
 import org.loststone.toodledo.xml.GoalsParser;
 
 public class ToodledoApiImpl implements ToodledoApi {
+	int requestCount = 0;
+	
+	public int getRequestCount() {
+		return requestCount;
+	}
+
+	public void resetRequestCount() {
+		this.requestCount = 0;
+	}
 
 	public int addTodo(AuthToken auth, Todo todo) throws ToodledoApiException {
 		AddTodoRequest request = new AddTodoRequest(auth, todo);
 		AddTodoResponse resp = (AddTodoResponse) request.getResponse();
+		requestCount++;
 		if (resp.succeeded())
 			return Integer.parseInt(resp.getResponseContent());
 		else
@@ -58,6 +79,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		TodoFilter filter = new TodoFilter();
 		filter.setId(id);
 		List<Todo> res = getTodosList(auth,filter);
+		requestCount++;
 		if (res != null && res.size() > 0) {
 			return res.get(0);
 		} else {
@@ -72,8 +94,19 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public List<Todo> getTodosList(AuthToken auth, TodoFilter filter) throws ToodledoApiException {
 		Request getTodosRequest = new GetTodosRequest(auth, filter);
 		GetTodosResponse response = (GetTodosResponse)getTodosRequest.getResponse();
+		requestCount++;
 		if (response.succeeded())
 			return new GetTodosParser(response.getXmlResponseContent()).getTodos();
+		else
+			return null;
+	}
+
+	public Map<Integer,TdDateTime> getDeletedTodosList(AuthToken auth, TdDateTime after) throws ToodledoApiException {
+		Request getTodosRequest = new GetDeletedRequest(auth, after);
+		GetDeletedResponse response = (GetDeletedResponse)getTodosRequest.getResponse();
+		requestCount++;
+		if (response.succeeded())
+			return new GetDeletedParser(response.getXmlResponseContent()).getDeletedIds();
 		else
 			return null;
 	}
@@ -89,6 +122,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public boolean modifyTodo(AuthToken auth, Todo newOne)  throws ToodledoApiException{
 		ModifyTodoRequest modifyRequest = new ModifyTodoRequest(auth,newOne);
 		ModifyTodoResponse resp = (ModifyTodoResponse)modifyRequest.getResponse();
+		requestCount++;
 		if (resp.succeeded()) {
 			Integer _t = Integer.parseInt(resp.getResponseContent());
 			if (_t == 1) return true;
@@ -100,6 +134,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public boolean deleteTodo(AuthToken auth, int id)  throws ToodledoApiException{
 		DeleteTodoRequest request = new DeleteTodoRequest(auth, id);
 		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
+		requestCount++;
 		if (resp.succeeded()) {
 			Integer _t = Integer.parseInt(resp.getResponseContent());
 			if (_t == 1) return true;
@@ -121,6 +156,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public List<Folder> getFolders(AuthToken auth)  throws ToodledoApiException{
 		GetFoldersRequest request = new GetFoldersRequest(auth);
 		GetFoldersResponse resp = (GetFoldersResponse)request.getResponse();
+		requestCount++;
 		if (resp.succeeded())
 			return new FolderParser(resp.getXmlResponseContent()).getFolders();
 		else
@@ -130,6 +166,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public List<Goal> getGoals(AuthToken auth)  throws ToodledoApiException{
 		GetGoalsRequest request = new GetGoalsRequest(auth);
 		GetGoalsResponse resp = (GetGoalsResponse)request.getResponse();
+		requestCount++;
 		if (resp.succeeded())
 			return new GoalsParser(resp.getXmlResponseContent()).getGoals();
 		else
@@ -140,6 +177,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 			throws ToodledoApiException {
 		AddFolderRequest request = new AddFolderRequest(auth,fold);
 		AddFolderResponse response = (AddFolderResponse)request.getResponse();
+		requestCount++;
 		if (response.succeeded())
 			return Integer.parseInt(response.getResponseContent());
 		else
@@ -150,6 +188,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 			throws ToodledoApiException {
 		AddContextRequest request = new AddContextRequest(auth, context);
 		AddContextResponse response = (AddContextResponse)request.getResponse();
+		requestCount++;
 		if (response.succeeded())
 			return Integer.parseInt(response.getResponseContent());
 		else
@@ -159,6 +198,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	public int addGoal(AuthToken auth, Goal goal) throws ToodledoApiException {
 		AddGoalRequest request = new AddGoalRequest(auth, goal);
 		AddGoalResponse response = (AddGoalResponse)request.getResponse();
+		requestCount++;
 		if (response.succeeded())
 			return Integer.parseInt(response.getResponseContent());
 		else
@@ -179,13 +219,30 @@ public class ToodledoApiImpl implements ToodledoApi {
 			throws ToodledoApiException {
 		DeleteFolderRequest request = new DeleteFolderRequest(auth, folderId);
 		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
+		requestCount++;
 		if (resp.succeeded()) {
 			Integer _t = Integer.parseInt(resp.getResponseContent());
 			if (_t == 1) return true;
 			else return false;
 		} else
-			return false;
-		
+			return false;		
+	}
+
+	public AccountInfo getAccountInfo(AuthToken auth) throws ToodledoApiException {
+		GetAccountInfoRequest request = new GetAccountInfoRequest(auth);
+		GetAccountInfoResponse resp = (GetAccountInfoResponse) request.getResponse();
+		requestCount++;
+		if (resp.succeeded())
+			return new GetAccountInfoParser(resp.getXmlResponseContent()).getAccountInfo();
+		else
+			return null;
+	}
+
+	public boolean editFolder(AuthToken authtoken, Folder folder) throws ToodledoApiException {
+		EditFolderRequest request = new EditFolderRequest(authtoken, folder);
+		Response resp = request.getResponse();
+		requestCount++;
+		return resp.succeeded();
 	}
 
 }

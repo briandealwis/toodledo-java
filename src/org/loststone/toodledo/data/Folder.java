@@ -17,6 +17,7 @@ public class Folder {
 	
 	boolean hasName = false;
 	boolean hasPrivate = false;
+	boolean hasArchived = false;
 	
 	/**
 	 * Checks if this folder has the name field set.
@@ -69,6 +70,10 @@ public class Folder {
 		hasPrivate = true;
 	}
 	
+	public boolean hasArchived() {
+		return hasArchived;
+	}
+	
 	/**
 	 * @return true if the folder is archived, false otherwise.
 	 */
@@ -80,6 +85,7 @@ public class Folder {
 	 * @param true if the folder is archived, false otherwise.
 	 */
 	public void setArchived(boolean archived) {
+		this.hasArchived = true;
 		this.archived = archived;
 	}
 	
@@ -119,6 +125,6 @@ public class Folder {
 		
 		this.hasName = true;
 	}
-	
+
 	
 }

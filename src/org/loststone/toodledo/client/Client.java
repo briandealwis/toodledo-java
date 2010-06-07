@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import org.loststone.toodledo.ToodledoApi;
 import org.loststone.toodledo.ToodledoApiImpl;
+import org.loststone.toodledo.data.AccountInfo;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
 import org.loststone.toodledo.data.Todo;
@@ -72,13 +73,15 @@ public class Client {
 		boolean finish = false; 
 		while (!finish) {
 			System.out.println("-- toodledo api example --");
+			System.out.println(" 0) get account info.");
 			System.out.println(" 1) get all folders.");
 			System.out.println(" 2) get all goals");
 			System.out.println(" 3) get all todos");
 			System.out.println(" 4) exit");
-			System.out.print("Select option [1,2,3,4]: ");
+			System.out.print("Select option [0,1,2,3,4]: ");
 			Integer option = scan.nextInt();
 			switch (option) {
+				case 0: getAccountInfo(); break;
 				case 1: getFolders(); break;
 				case 2: getGoals(); break;
 				case 3: getTodos(); break;
@@ -89,6 +92,27 @@ public class Client {
 		}
 	}
 	
+	private void getAccountInfo() {
+		try {
+			AccountInfo info = tdApi.getAccountInfo(token);
+			System.out.printf("%20s: %s\n", "userId", info.getUserId());
+			System.out.printf("%20s: %s\n", "alias", info.getAlias());
+			System.out.printf("%20s: %s\n", "timezone (in 30-min incr)", info.getTimezone());
+			System.out.printf("%20s: %s\n", "preferred date format", info.getDateFormat());
+			System.out.printf("%20s: %s\n", "hide tasks this many months in future", 
+					info.getHideMonths());
+			System.out.printf("%20s: %s\n", "hotlist priority", info.getHotlistPriority());
+			System.out.printf("%20s: %s\n", "hotlist advance in due-date", info.getHotlistDueDate());
+			System.out.printf("%20s: %s\n", "last task add/edit", info.getLastAddEdit());
+			System.out.printf("%20s: %s\n", "last task deletion", info.getLastDelete());
+			System.out.printf("%20s: %s\n", "last folder change", info.getLastFolderEdit());
+			System.out.printf("%20s: %s\n", "last context change", info.getLastContextEdit());
+			System.out.printf("%20s: %s\n", "last goal change", info.getLastGoalEdit());
+		} catch(ToodledoApiException e) {
+			e.printStackTrace();			
+		}
+	}
+
 	/**
 	 * Gets the list of all todos and prints their id and their title.
 	 */

@@ -1,7 +1,9 @@
 package org.loststone.toodledo;
 
 import java.util.List;
+import java.util.Map;
 
+import org.loststone.toodledo.data.AccountInfo;
 import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
@@ -11,6 +13,7 @@ import org.loststone.toodledo.exception.IncorrectUserPasswordException;
 import org.loststone.toodledo.exception.MissingPasswordException;
 import org.loststone.toodledo.exception.ToodledoApiException;
 import org.loststone.toodledo.util.AuthToken;
+import org.loststone.toodledo.util.TdDateTime;
 
 /**
  * toodle do api implemented by this library.
@@ -100,7 +103,7 @@ public interface ToodledoApi {
 	List<Todo> getTodosList(AuthToken auth) throws ToodledoApiException;
 	
 	/**
-	 * Gets all the tasks that match the given task.
+	 * Gets all the tasks that match the given filter details.
 	 * @param auth Authorization token for that user.
 	 * @param filter This task is a dummy task. It's used as a filter for the search.
 	 * @return A list containing the tasks that match the filter.
@@ -108,6 +111,15 @@ public interface ToodledoApi {
 	 */
 	List<Todo> getTodosList(AuthToken auth, TodoFilter filter) throws ToodledoApiException;
 	
+	/**
+	 * Gets all the tasks that were deleted after {@code after}
+	 * @param auth Authorization token for that user.
+	 * @param after the date-time boundary
+	 * @return A map of task ids to the date-time when they were deleted
+	 * @throws ToodledoApiException
+	 */
+	Map<Integer,TdDateTime> getDeletedTodosList(AuthToken auth, TdDateTime after) throws ToodledoApiException;
+
 	/**
 	 * Gets all the folders
 	 * @param auth Authorization token for that user.
@@ -154,5 +166,22 @@ public interface ToodledoApi {
 	 * @throws ToodledoApiException
 	 */
 	boolean deleteFolder(AuthToken auth, int folderId) throws ToodledoApiException;
-	
+
+	/**
+	 * Retrieve the account details for this user.
+	 * @param auth Authorization token for that user.
+	 * @return the account details.
+	 * @throws ToodledoApiException
+	 */
+	AccountInfo getAccountInfo(AuthToken auth) throws ToodledoApiException;
+
+	/**
+	 * Change the details for the specified folder.
+	 * @param auth Authorization token for that user.
+	 * @param folder the model folder changes
+	 * @return true if successful
+	 * @throws ToodledoApiException
+	 */
+	boolean editFolder(AuthToken authtoken, Folder folder) throws ToodledoApiException;
+
 }

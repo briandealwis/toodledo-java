@@ -2,30 +2,29 @@ package org.loststone.toodledo.request;
 
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.exception.ToodledoApiException;
-import org.loststone.toodledo.response.AddFolderResponse;
+import org.loststone.toodledo.response.GenericDeleteResponse;
 import org.loststone.toodledo.response.Response;
 import org.loststone.toodledo.util.AuthToken;
 import org.loststone.toodledo.util.TextEncoder;
 
-public class AddFolderRequest extends Request {
+public class EditFolderRequest extends Request {
 
 	private TextEncoder tEnc = new TextEncoder();
 
-	public AddFolderRequest(AuthToken token, Folder fold) throws ToodledoApiException {
+	public EditFolderRequest(AuthToken token, Folder fold) throws ToodledoApiException {
 		super();
-		this.url = "http://api.toodledo.com/api.php?method=addFolder;key="+token.getKey();
-		StringBuffer buff = new StringBuffer();
+		this.url = "http://api.toodledo.com/api.php?method=editFolder;key="+token.getKey()+";id="+fold.getId();
+		StringBuilder buff = new StringBuilder();
 		if (fold.hasName()) { 
 			buff.append(";title=").append(tEnc.encode(fold.getSName())); 
-		} else { 
-			throw new ToodledoApiException("Folder object at least must have a name!");
-		}
+		} 
 		if (fold.hasPrivate()) {
 			buff.append(";private=");
-			if (fold.isBPrivate())
-				buff.append("1");
-			else
-				buff.append("0");
+			buff.append(fold.isBPrivate() ? "1" : "0");
+		}
+		if (fold.hasArchived()) {
+			buff.append(";archived=");
+			buff.append(fold.isArchived() ? "1" : "0");
 		}
 		
 		this.url = this.url.concat(buff.toString());
@@ -34,8 +33,7 @@ public class AddFolderRequest extends Request {
 	@Override
 	public Response getResponse() {
 		this.exec();
-		AddFolderResponse response = new AddFolderResponse(this.xmlResponse);
+		GenericDeleteResponse response = new GenericDeleteResponse(this.xmlResponse);
 		return response;
 	}
-	
 }
