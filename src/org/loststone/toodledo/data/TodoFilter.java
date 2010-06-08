@@ -505,7 +505,7 @@ public class TodoFilter {
 	/**
 	 * @return the hasCompafter
 	 */
-	public boolean isHasCompafter() {
+	public boolean hasCompafter() {
 		return hasCompafter;
 	}
 

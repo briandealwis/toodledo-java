@@ -26,6 +26,12 @@ public class ModifyTodoRequest extends Request {
 		if (todo.hasContext()) buff.append(";context=").append(todo.getContext());
 		if (todo.hasGoal()) buff.append(";goal=").append(todo.getGoal());
 		if (todo.hasParent()) buff.append(";parent=").append(todo.getParent());
+		if (todo.hasCompleted()) {
+			buff.append(";completed=").append(todo.getCompleted() == null ? "0" : "1");
+			if(todo.getCompleted() != null) {
+				buff.append(";completedon=").append(todo.getCompleted());
+			}
+		}
 		if (todo.hasStartDate()) buff.append(";startdate=").append(todo.getStartDate());
 		if (todo.hasStartTime()) buff.append(";starttime=").append(todo.getStartTime());
 		if (todo.hasDueDate()) buff.append(";duedate=").append(todo.getDueDate());
@@ -43,6 +49,7 @@ public class ModifyTodoRequest extends Request {
 
 	@Override
 	public Response getResponse() {
+		this.exec();
 		if (this.xmlResponse == null) 
 			return null;
 		ModifyTodoResponse mresp = new ModifyTodoResponse(this.xmlResponse);

@@ -184,4 +184,5 @@ public interface ToodledoApi {
 	 */
 	boolean editFolder(AuthToken authtoken, Folder folder) throws ToodledoApiException;
 
+	int getRequestCount();
 }
