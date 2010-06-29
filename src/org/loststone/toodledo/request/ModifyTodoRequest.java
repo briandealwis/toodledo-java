@@ -32,17 +32,17 @@ public class ModifyTodoRequest extends Request {
 				buff.append(";completedon=").append(todo.getCompleted());
 			}
 		}
-		if (todo.hasStartDate()) buff.append(";startdate=").append(todo.getStartDate());
-		if (todo.hasStartTime()) buff.append(";starttime=").append(todo.getStartTime());
-		if (todo.hasDueDate()) buff.append(";duedate=").append(todo.getDueDate());
-		if (todo.hasDueTime()) buff.append(";duetime=").append(todo.getDueTime());
+		if (todo.hasStartDate()) buff.append(";startdate=").append(tEnc.encode(todo.getStartDate().toString()));
+		if (todo.hasStartTime()) buff.append(";starttime=").append(tEnc.encode(todo.getStartTime().toString()));
+		if (todo.hasDueDate()) buff.append(";duedate=").append(tEnc.encode(todo.getDueDate().toString()));
+		if (todo.hasDueTime()) buff.append(";duetime=").append(tEnc.encode(todo.getDueTime().toString()));
 		if (todo.hasReminder()) buff.append(";reminder=").append(todo.getReminder());
 		if (todo.hasRepeat()) buff.append(";repeat=").append(todo.getRepeat());
 		if (todo.hasRepAdvanced()) buff.append(";rep_advanced=").append(tEnc.encode(todo.getRepAdvanced()));
 		if (todo.hasStatus()) buff.append(";status=").append(todo.getStatus());
 		if (todo.hasLength()) buff.append(";length=").append(todo.getLength());
 		if (todo.hasPriority()) buff.append(";priority=").append(todo.getPriority());
-		if (todo.hasStar()) buff.append(";star=").append(todo.isStar());
+		if (todo.hasStar()) buff.append(";star=").append(todo.isStar() ? "1" : "0");
 		if (todo.hasNote()) buff.append(";note=").append(tEnc.encode(todo.getNote()));
 		this.url = this.url.concat(buff.toString());
 	}

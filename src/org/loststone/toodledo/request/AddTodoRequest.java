@@ -34,7 +34,7 @@ public class AddTodoRequest extends Request {
 		if (todo.hasStatus()) buff.append(";status=").append(todo.getStatus());
 		if (todo.hasLength()) buff.append(";length=").append(todo.getLength());
 		if (todo.hasPriority()) buff.append(";priority=").append(todo.getPriority());
-		if (todo.hasStar()) buff.append(";star=").append(todo.isStar());
+		if (todo.hasStar()) buff.append(";star=").append(todo.isStar() ? "1" : "0");
 		if (todo.hasNote()) buff.append(";note=").append(tEnc.encode(todo.getNote()));
 		this.url = this.url.concat(buff.toString());
 	}
