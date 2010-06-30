@@ -1,5 +1,8 @@
 package org.loststone.toodledo.util;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.net.URLCodec;
+
 /**
  * Static classes and singletons are bad. God kills a kitten every time you code one of those.
  * Really. What's the problem in instantiating an object?
@@ -7,17 +10,15 @@ package org.loststone.toodledo.util;
  *
  */
 public class TextEncoder {
+	URLCodec codec = new URLCodec();	// defaults to UTF8, which should be ok?
+	
 	public String encode(String original) {
-		// whattodo re: Unicode?!
-		return original
-			.replace("&", "%26")
-			.replace(";", "%3B")
-			.replace(" ", "%20")
-			.replace("<", "%3C")
-			.replace(">", "%3E")
-			.replace("'", "%27")
-			.replace("\"", "%22")
-			.replace("\r", "%0D")
-			.replace("\n", "%0A");
+		try {
+			return codec.encode(original);
+		} catch(EncoderException e) {
+			// shouldn't happen
+			e.printStackTrace();
+			return original;	//???
+		}
 	}
 }
