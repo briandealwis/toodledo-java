@@ -14,6 +14,7 @@ public class ModifyTodoRequest extends Request {
 	public ModifyTodoRequest(AuthToken token, Todo todo) throws ToodledoApiException {
 		super();
 		this.url = "http://api.toodledo.com/api.php?method=editTask;key="+token.getKey();
+		// ensure changes are also made to AddTodoRequest
 		StringBuffer buff = new StringBuffer();
 		if (todo.hasId()) {
 			buff.append(";id="+todo.getId());
@@ -37,11 +38,17 @@ public class ModifyTodoRequest extends Request {
 		if (todo.hasDueDate()) buff.append(";duedate=").append(tEnc.encode(todo.getDueDate().toString()));
 		if (todo.hasDueTime()) buff.append(";duetime=").append(tEnc.encode(todo.getDueTime().toString()));
 		if (todo.hasReminder()) buff.append(";reminder=").append(todo.getReminder());
-		if (todo.hasRepeat()) buff.append(";repeat=").append(todo.getRepeat());
+		if (todo.hasRepeat() && todo.getRepeat() != null) {
+			buff.append(";repeat=").append(todo.getRepeat().getRepeatAsInteger());
+		}
 		if (todo.hasRepAdvanced()) buff.append(";rep_advanced=").append(tEnc.encode(todo.getRepAdvanced()));
-		if (todo.hasStatus()) buff.append(";status=").append(todo.getStatus());
+		if (todo.hasStatus() && todo.getStatus() != null) {
+			buff.append(";status=").append(todo.getStatus().getStatusAsInteger());
+		}
 		if (todo.hasLength()) buff.append(";length=").append(todo.getLength());
-		if (todo.hasPriority()) buff.append(";priority=").append(todo.getPriority());
+		if (todo.hasPriority() && todo.getPriority() != null) {
+			buff.append(";priority=").append(todo.getPriority().getPriorityAsInt());
+		}
 		if (todo.hasStar()) buff.append(";star=").append(todo.isStar() ? "1" : "0");
 		if (todo.hasNote()) buff.append(";note=").append(tEnc.encode(todo.getNote()));
 		this.url = this.url.concat(buff.toString());
