@@ -46,13 +46,6 @@ import org.loststone.toodledo.response.ModifyTodoResponse;
 import org.loststone.toodledo.response.Response;
 import org.loststone.toodledo.util.AuthToken;
 import org.loststone.toodledo.util.TdDateTime;
-import org.loststone.toodledo.xml.ContextsParser;
-import org.loststone.toodledo.xml.FolderParser;
-import org.loststone.toodledo.xml.GetAccountInfoParser;
-import org.loststone.toodledo.xml.GetDeletedParser;
-import org.loststone.toodledo.xml.GetTodosParser;
-import org.loststone.toodledo.xml.GetUserIdParser;
-import org.loststone.toodledo.xml.GoalsParser;
 
 public class ToodledoApiImpl implements ToodledoApi {
 	int requestCount = 0;
@@ -96,7 +89,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetTodosResponse response = (GetTodosResponse)getTodosRequest.getResponse();
 		requestCount++;
 		if (response.succeeded())
-			return new GetTodosParser(response.getXmlResponseContent()).getTodos();
+			return response.getTodos();
 		else
 			return null;
 	}
@@ -106,7 +99,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetDeletedResponse response = (GetDeletedResponse)getTodosRequest.getResponse();
 		requestCount++;
 		if (response.succeeded())
-			return new GetDeletedParser(response.getXmlResponseContent()).getDeletedIds();
+			return response.getDeletedIds();
 		else
 			return null;
 	}
@@ -148,7 +141,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetContextsRequest request = new GetContextsRequest(auth);
 		GetContextsResponse resp = (GetContextsResponse)request.getResponse();
 		if (resp.succeeded())
-			return new ContextsParser(resp.getXmlResponseContent()).getContexts();
+			return resp.getContexts();
 		else
 			return null;
 	}
@@ -158,7 +151,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetFoldersResponse resp = (GetFoldersResponse)request.getResponse();
 		requestCount++;
 		if (resp.succeeded())
-			return new FolderParser(resp.getXmlResponseContent()).getFolders();
+			return resp.getFolders();
 		else
 			return null;
 	}
@@ -168,7 +161,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetGoalsResponse resp = (GetGoalsResponse)request.getResponse();
 		requestCount++;
 		if (resp.succeeded())
-			return new GoalsParser(resp.getXmlResponseContent()).getGoals();
+			return resp.getGoals();
 		else
 			return null;
 	}
@@ -210,7 +203,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetUserIdRequest request = new GetUserIdRequest(mail,password);
 		GetUserIdResponse response = (GetUserIdResponse)request.getResponse();
 		if(response.succeeded()) 
-			return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
+			return response.getUserId();
 		else
 			return null;
 	}
@@ -233,7 +226,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		GetAccountInfoResponse resp = (GetAccountInfoResponse) request.getResponse();
 		requestCount++;
 		if (resp.succeeded())
-			return new GetAccountInfoParser(resp.getXmlResponseContent()).getAccountInfo();
+			return resp.getAccountInfo();
 		else
 			return null;
 	}
