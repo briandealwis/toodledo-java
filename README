@@ -16,3 +16,11 @@ Thanks to
 ---------
 Brian de Alwis
 Gwyin Evans
+
+----------------------------------------------------------------------
+Forked by Brian de Alwis <bsd@mt.ca> -- I made somewhat substantial
+changes to add new requests, error handling, and testing.  Marc
+didn't seem to want to incorporate them!  Which is fine, but I
+needed them :-)
+
+All changes are released to the public domain.
