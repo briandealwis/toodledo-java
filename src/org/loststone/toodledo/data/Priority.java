@@ -13,21 +13,22 @@ public enum Priority {
 
 	private final int number;  
 
+	private static final Map<Integer,Priority> lookup =
+		new HashMap<Integer, Priority>(5);
+	
+	static {
+		for(Priority p : EnumSet.allOf(Priority.class)) {
+			lookup.put(p.getPriorityAsInt(), p);
+		}
+	}
+
 	Priority(int number) {
 		this.number = number;
 	}
+
 	public int getPriorityAsInt()   { return number; }
 
-    private static final Map<Integer,Priority> lookup =
-    	new HashMap<Integer, Priority>(5);
-    
-    static {
-    	for(Priority p : EnumSet.allOf(Priority.class)) {
-    		lookup.put(p.getPriorityAsInt(), p);
-    	}
-    }
-    
-    public static Priority get(int number) {
-    	return lookup.get(number);
-    }
+	public static Priority get(int number) {
+		return lookup.get(number);
+	}
 }

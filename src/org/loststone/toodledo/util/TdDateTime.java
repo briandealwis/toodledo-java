@@ -10,16 +10,22 @@ public class TdDateTime extends TdDate {
 		super();
 	}
 	
+	public TdDateTime(String dateTime) {
+	  DateTimeFormatter parser =
+	   DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+	  
+	  try { this.dt = parser.parseDateTime(dateTime); }
+	  catch (Exception e) { this.dt = null; }
+  	}
+	
 	public TdDateTime(int year, int month, int day, int hour, int minute, int second) {
-		this.dt = new DateTime(year, month, day, hour, minute, second, 0);
+	  try {
+	    this.dt = new DateTime(year, month, day, hour, minute, second, 0);
+	  } catch (Exception e) { this.dt = null; }
 	}
 	
-	public TdDateTime(String content) {
-		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
-		dt = fmt.parseDateTime(content);
-	}
-
 	public String toString() {
+		if (this.dt == null) return "";
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 		return dt.toString(fmt);
 	}

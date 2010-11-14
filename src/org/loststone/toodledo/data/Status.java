@@ -19,11 +19,6 @@ public enum Status {
     REFERENCE(10);
     
     private final int number; 
-    Status(int number) {
-    	this.number = number;
-    }
-    
-    public int getStatusAsInteger() {return this.number;}
     
     private static final Map<Integer,Status> lookup =
     	new HashMap<Integer, Status>(11);
@@ -33,6 +28,12 @@ public enum Status {
     		lookup.put(s.getStatusAsInteger(), s);
     	}
     }
+    
+    Status(int number) {
+    	this.number = number;
+    }
+    
+    public int getStatusAsInteger() {return this.number;}
     
     public static Status get(int number) {
     	return lookup.get(number);
